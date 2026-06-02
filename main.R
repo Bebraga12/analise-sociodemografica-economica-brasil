@@ -1,26 +1,24 @@
 library(DBI)
-library(odbc)
+library(RPostgres)
 library(dotenv)
 
 load_dot_env()
 
-con <- dbConnect(
-  odbc(),
-  Driver = "ODBC Driver 18 for SQL Server",
-  Server = Sys.getenv("AZURE_SQL_SERVER"),
-  Database = Sys.getenv("AZURE_SQL_DATABASE"),
-  UID = Sys.getenv("AZURE_SQL_USER"),
-  PWD = Sys.getenv("AZURE_SQL_PASSWORD"),
-  Port = as.integer(Sys.getenv("AZURE_SQL_PORT")),
-  Encrypt = Sys.getenv("AZURE_SQL_ENCRYPT"),
-  TrustServerCertificate = Sys.getenv("AZURE_SQL_TRUST_SERVER_CERTIFICATE")
-)
+source("R/db.R")
+source("R/queries.R")
 
-resultado <- dbGetQuery(con, "
-SELECT
-    1 AS teste;
-")
+con <- conectar_banco()
 
-print(resultado)
+resultado_analise_1 <- executar_analise_1(con)
+print(resultado_analise_1)
+
+resultado_analise_2 <- executar_analise_2(con)
+print(resultado_analise_2)
+
+resultado_analise_3 <- executar_analise_3(con)
+print(resultado_analise_3)
+
+resultado_analise_4 <- executar_analise_4(con)
+print(resultado_analise_4)
 
 dbDisconnect(con)
